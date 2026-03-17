@@ -106,6 +106,7 @@ pipeline {
                     steps {
                         dir('vote') {
                             sh '''
+                                mkdir -p reports
                                 docker build -t yassine123432/vote:${BUILD_NUMBER} -t yassine123432/vote:latest .
                             '''
                         }
@@ -122,6 +123,7 @@ pipeline {
                     steps {
                         dir('result') {
                             sh '''
+                                mkdir -p reports
                                 docker build -t yassine123432/result:${BUILD_NUMBER} -t yassine123432/result:latest .
                             '''
                         }
@@ -138,6 +140,7 @@ pipeline {
                     steps {
                         dir('worker') {
                             sh '''
+                                mkdir -p reports
                                 docker build -t yassine123432/worker:${BUILD_NUMBER} -t yassine123432/worker:latest .
                             '''
                         }
