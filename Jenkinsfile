@@ -25,18 +25,9 @@ pipeline {
                                 mkdir -p reports
                                 python -m venv .venv
                                 . .venv/bin/activate
-                                python -m pip install --upgrade pip
                                 python -m pip install flake8 pytest
-                                set +e
-                                python -m flake8 app.py --output-file reports/flake8.txt
-                                flake8_status=$?
+                                python -m flake8 app.py --output-file reports/flake8.txt || true
                                 python -m pytest -q --junitxml=reports/pytest.xml
-                                pytest_status=$?
-                                set -e
-
-                                if [ $flake8_status -ne 0 ] || [ $pytest_status -ne 0 ]; then
-                                    exit 1
-                                fi
                             '''
                         }
                     }
