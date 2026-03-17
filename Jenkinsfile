@@ -23,9 +23,9 @@ pipeline {
                         dir('vote') {
                             sh '''
                                 mkdir -p reports
-                                pip install --user flake8 pytest
-                                flake8 . --output-file reports/flake8.txt
-                                pytest -q --junitxml=reports/pytest.xml
+                                python -m pip install --user flake8 pytest
+                                python -m flake8 . --output-file reports/flake8.txt
+                                python -m pytest -q --junitxml=reports/pytest.xml
                             '''
                         }
                     }
@@ -240,6 +240,8 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                             dir('vote') {
                                 sh '''
+                                    export DOCKER_CONFIG="$WORKSPACE/.docker-vote"
+                                    mkdir -p "$DOCKER_CONFIG"
                                     echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
                                     docker push yassine123432/vote:${BUILD_NUMBER}
                                     docker push yassine123432/vote:latest
@@ -261,6 +263,8 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                             dir('result') {
                                 sh '''
+                                    export DOCKER_CONFIG="$WORKSPACE/.docker-result"
+                                    mkdir -p "$DOCKER_CONFIG"
                                     echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
                                     docker push yassine123432/result:${BUILD_NUMBER}
                                     docker push yassine123432/result:latest
@@ -282,6 +286,8 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                             dir('worker') {
                                 sh '''
+                                    export DOCKER_CONFIG="$WORKSPACE/.docker-worker"
+                                    mkdir -p "$DOCKER_CONFIG"
                                     echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
                                     docker push yassine123432/worker:${BUILD_NUMBER}
                                     docker push yassine123432/worker:latest
