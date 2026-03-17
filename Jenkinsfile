@@ -23,7 +23,10 @@ pipeline {
                         dir('vote') {
                             sh '''
                                 mkdir -p reports
-                                python -m pip install --user flake8 pytest
+                                python -m venv .venv
+                                . .venv/bin/activate
+                                python -m pip install --upgrade pip
+                                python -m pip install flake8 pytest
                                 python -m flake8 . --output-file reports/flake8.txt
                                 python -m pytest -q --junitxml=reports/pytest.xml
                             '''
