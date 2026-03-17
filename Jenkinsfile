@@ -171,22 +171,20 @@ pipeline {
                         }
                     }
                     steps {
-                        dir('vote') {
-                            sh '''
-                                mkdir -p reports
-                                docker run --rm \
-                                  -v /var/run/docker.sock:/var/run/docker.sock \
-                                  -v "$WORKSPACE/.trivycache:/root/.cache/" \
-                                  -v "$PWD/reports:/workspace/reports" \
-                                  aquasec/trivy:0.58.1 image \
-                                  --skip-db-update \
-                                  --severity HIGH,CRITICAL \
-                                  --format json \
-                                  --output /workspace/reports/trivy-vote.json \
-                                  --exit-code 1 \
-                                  yassine123432/vote:${BUILD_NUMBER}
-                            '''
-                        }
+                        sh '''
+                            mkdir -p vote/reports
+                            docker run --rm \
+                              -v /var/run/docker.sock:/var/run/docker.sock \
+                              -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                              -v "$WORKSPACE/vote/reports:/output" \
+                              aquasec/trivy:0.58.1 image \
+                              --skip-db-update \
+                              --severity HIGH,CRITICAL \
+                              --format json \
+                              --output /output/trivy-vote.json \
+                              --exit-code 1 \
+                              yassine123432/vote:${BUILD_NUMBER}
+                        '''
                     }
                 }
 
@@ -198,22 +196,20 @@ pipeline {
                         }
                     }
                     steps {
-                        dir('result') {
-                            sh '''
-                                mkdir -p reports
-                                docker run --rm \
-                                  -v /var/run/docker.sock:/var/run/docker.sock \
-                                  -v "$WORKSPACE/.trivycache:/root/.cache/" \
-                                  -v "$PWD/reports:/workspace/reports" \
-                                  aquasec/trivy:0.58.1 image \
-                                  --skip-db-update \
-                                  --severity HIGH,CRITICAL \
-                                  --format json \
-                                  --output /workspace/reports/trivy-result.json \
-                                  --exit-code 1 \
-                                  yassine123432/result:${BUILD_NUMBER}
-                            '''
-                        }
+                        sh '''
+                            mkdir -p result/reports
+                            docker run --rm \
+                              -v /var/run/docker.sock:/var/run/docker.sock \
+                              -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                              -v "$WORKSPACE/result/reports:/output" \
+                              aquasec/trivy:0.58.1 image \
+                              --skip-db-update \
+                              --severity HIGH,CRITICAL \
+                              --format json \
+                              --output /output/trivy-result.json \
+                              --exit-code 1 \
+                              yassine123432/result:${BUILD_NUMBER}
+                        '''
                     }
                 }
 
@@ -225,22 +221,20 @@ pipeline {
                         }
                     }
                     steps {
-                        dir('worker') {
-                            sh '''
-                                mkdir -p reports
-                                docker run --rm \
-                                  -v /var/run/docker.sock:/var/run/docker.sock \
-                                  -v "$WORKSPACE/.trivycache:/root/.cache/" \
-                                  -v "$PWD/reports:/workspace/reports" \
-                                  aquasec/trivy:0.58.1 image \
-                                  --skip-db-update \
-                                  --severity HIGH,CRITICAL \
-                                  --format json \
-                                  --output /workspace/reports/trivy-worker.json \
-                                  --exit-code 1 \
-                                  yassine123432/worker:${BUILD_NUMBER}
-                            '''
-                        }
+                        sh '''
+                            mkdir -p worker/reports
+                            docker run --rm \
+                              -v /var/run/docker.sock:/var/run/docker.sock \
+                              -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                              -v "$WORKSPACE/worker/reports:/output" \
+                              aquasec/trivy:0.58.1 image \
+                              --skip-db-update \
+                              --severity HIGH,CRITICAL \
+                              --format json \
+                              --output /output/trivy-worker.json \
+                              --exit-code 1 \
+                              yassine123432/worker:${BUILD_NUMBER}
+                        '''
                     }
                 }
             }
