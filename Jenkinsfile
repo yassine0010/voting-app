@@ -78,6 +78,11 @@ pipeline {
                         dir('worker') {
                             sh '''
                                 mkdir -p reports
+                                mkdir -p "$WORKSPACE/.dotnet" "$WORKSPACE/.nuget/packages"
+                                export DOTNET_CLI_HOME="$WORKSPACE/.dotnet"
+                                export NUGET_PACKAGES="$WORKSPACE/.nuget/packages"
+                                export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+                                export DOTNET_CLI_TELEMETRY_OPTOUT=1
                                 dotnet restore
                                 dotnet format --verify-no-changes --report reports/format-report.json || true
                                 dotnet test --logger "trx;LogFileName=reports/test-results.trx" || true
