@@ -27,7 +27,11 @@ pipeline {
                                 . .venv/bin/activate
                                 python -m pip install flake8 pytest
                                 python -m flake8 app.py --output-file reports/flake8.txt || true
-                                python -m pytest -q --junitxml=reports/pytest.xml
+                                if find . -maxdepth 3 -type f \( -name 'test_*.py' -o -name '*_test.py' \) | grep -q .; then
+                                    python -m pytest -q --junitxml=reports/pytest.xml
+                                else
+                                    echo "No tests found in vote/, skipping pytest."
+                                fi
                             '''
                         }
                     }
