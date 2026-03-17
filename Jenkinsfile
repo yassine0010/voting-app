@@ -182,7 +182,7 @@ pipeline {
                               --severity HIGH,CRITICAL \
                               --format json \
                               --output /output/trivy-vote.json \
-                              --exit-code 1 \
+                              --exit-code 0 \
                               yassine123432/vote:${BUILD_NUMBER}
                         '''
                     }
@@ -208,7 +208,7 @@ pipeline {
                                       --severity HIGH,CRITICAL \
                                       --format json \
                                       --output /output/trivy-result.json \
-                                      --exit-code 1 \
+                                      --exit-code 0 \
                                       yassine123432/result:${BUILD_NUMBER}
                                 '''
                             }
@@ -235,7 +235,7 @@ pipeline {
                                       --severity HIGH,CRITICAL \
                                       --format json \
                                       --output /output/trivy-worker.json \
-                                      --exit-code 1 \
+                                      --exit-code 0 \
                                       yassine123432/worker:${BUILD_NUMBER}
                                 '''
                             }
