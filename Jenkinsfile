@@ -174,11 +174,12 @@ pipeline {
                                 docker run --rm \
                                   -v /var/run/docker.sock:/var/run/docker.sock \
                                   -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                                  -v "$PWD/reports:/workspace/reports" \
                                   aquasec/trivy:0.58.1 image \
                                   --skip-db-update \
                                   --severity HIGH,CRITICAL \
                                   --format json \
-                                  --output reports/trivy-vote.json \
+                                  --output /workspace/reports/trivy-vote.json \
                                   --exit-code 1 \
                                   yassine123432/vote:${BUILD_NUMBER}
                             '''
@@ -200,11 +201,12 @@ pipeline {
                                 docker run --rm \
                                   -v /var/run/docker.sock:/var/run/docker.sock \
                                   -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                                  -v "$PWD/reports:/workspace/reports" \
                                   aquasec/trivy:0.58.1 image \
                                   --skip-db-update \
                                   --severity HIGH,CRITICAL \
                                   --format json \
-                                  --output reports/trivy-result.json \
+                                  --output /workspace/reports/trivy-result.json \
                                   --exit-code 1 \
                                   yassine123432/result:${BUILD_NUMBER}
                             '''
@@ -226,11 +228,12 @@ pipeline {
                                 docker run --rm \
                                   -v /var/run/docker.sock:/var/run/docker.sock \
                                   -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                                  -v "$PWD/reports:/workspace/reports" \
                                   aquasec/trivy:0.58.1 image \
                                   --skip-db-update \
                                   --severity HIGH,CRITICAL \
                                   --format json \
-                                  --output reports/trivy-worker.json \
+                                  --output /workspace/reports/trivy-worker.json \
                                   --exit-code 1 \
                                   yassine123432/worker:${BUILD_NUMBER}
                             '''
