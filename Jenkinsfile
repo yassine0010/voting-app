@@ -195,21 +195,23 @@ pipeline {
                             changeset pattern: 'Jenkinsfile', comparator: 'GLOB'
                         }
                     }
-                    steps {
-                        sh '''
-                            mkdir -p result/reports
-                            docker run --rm \
-                              -v /var/run/docker.sock:/var/run/docker.sock \
-                              -v "$WORKSPACE/.trivycache:/root/.cache/" \
-                              -v "$WORKSPACE/result/reports:/output" \
-                              aquasec/trivy:0.58.1 image \
-                              --skip-db-update \
-                              --severity HIGH,CRITICAL \
-                              --format json \
-                              --output /output/trivy-result.json \
-                              --exit-code 1 \
-                              yassine123432/result:${BUILD_NUMBER}
-                        '''
+                        steps {
+                            dir('result') {
+                                sh '''
+                                    mkdir -p reports
+                                    docker run --rm \
+                                      -v /var/run/docker.sock:/var/run/docker.sock \
+                                      -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                                      -v "$PWD/reports:/output" \
+                                      aquasec/trivy:0.58.1 image \
+                                      --skip-db-update \
+                                      --severity HIGH,CRITICAL \
+                                      --format json \
+                                      --output /output/trivy-result.json \
+                                      --exit-code 1 \
+                                      yassine123432/result:${BUILD_NUMBER}
+                                '''
+                            }
                     }
                 }
 
@@ -220,21 +222,23 @@ pipeline {
                             changeset pattern: 'Jenkinsfile', comparator: 'GLOB'
                         }
                     }
-                    steps {
-                        sh '''
-                            mkdir -p worker/reports
-                            docker run --rm \
-                              -v /var/run/docker.sock:/var/run/docker.sock \
-                              -v "$WORKSPACE/.trivycache:/root/.cache/" \
-                              -v "$WORKSPACE/worker/reports:/output" \
-                              aquasec/trivy:0.58.1 image \
-                              --skip-db-update \
-                              --severity HIGH,CRITICAL \
-                              --format json \
-                              --output /output/trivy-worker.json \
-                              --exit-code 1 \
-                              yassine123432/worker:${BUILD_NUMBER}
-                        '''
+                        steps {
+                            dir('worker') {
+                                sh '''
+                                    mkdir -p reports
+                                    docker run --rm \
+                                      -v /var/run/docker.sock:/var/run/docker.sock \
+                                      -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                                      -v "$PWD/reports:/output" \
+                                      aquasec/trivy:0.58.1 image \
+                                      --skip-db-update \
+                                      --severity HIGH,CRITICAL \
+                                      --format json \
+                                      --output /output/trivy-worker.json \
+                                      --exit-code 1 \
+                                      yassine123432/worker:${BUILD_NUMBER}
+                                '''
+                            }
                     }
                 }
             }
