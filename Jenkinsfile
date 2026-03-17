@@ -30,7 +30,7 @@ pipeline {
                                 if find . -maxdepth 3 -type f -name 'test_*.py' | grep -q . || find . -maxdepth 3 -type f -name '*_test.py' | grep -q .; then
                                     python -m pytest -q --junitxml=reports/pytest.xml
                                 else
-                                    echo "No tests found in vote/, skipping pytest."
+                                    echo "No tests found in vote/, skipping pytest"
                                 fi
                             '''
                         }
