@@ -24,7 +24,7 @@ pipeline {
                             sh '''
                                 mkdir -p reports
                                 python -m pip install --upgrade pip
-                                pip install flake8 pytest
+                                pip install --user flake8 pytest
                                 flake8 . --output-file reports/flake8.txt
                                 pytest -q --junitxml=reports/pytest.xml
                             '''
