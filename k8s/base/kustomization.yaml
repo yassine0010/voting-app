@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Base = the shared application manifest set. “bring me the whole app”
+
+# It only lists the common resources once.
+resources:
+  - app/vote-deployement.yaml
+  - app/vote-service.yaml
+  - app/result-deployement.yaml
+  - app/result-service.yaml
+  - app/worker-deployement.yaml
+  - storage/redis-deployement.yaml
+  - storage/redis-service.yaml
+  - storage/postegres-statfulset.yaml
+  - storage/postegres-service-headless.yaml
+  - Secrets/configmap.yaml
+  - Secrets/secrets.yaml
+  - routing/app-ingress.yaml

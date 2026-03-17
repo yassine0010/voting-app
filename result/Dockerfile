@@ -1,25 +1,16 @@
-FROM node:18-slim
+FROM node:18-alpine
 
-# add curl for healthcheck
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl tini && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-WORKDIR /usr/local/app
-
-# have nodemon available for local dev use (file watching)
-RUN npm install -g nodemon
+RUN addgroup -S app && adduser -S app -G app
 
 COPY package*.json ./
-
-RUN npm ci && \
- npm cache clean --force && \
- mv /usr/local/app/node_modules /node_modules
+RUN npm install
 
 COPY . .
 
-ENV PORT=80
-EXPOSE 80
+RUN chown -R app:app /app
 
-ENTRYPOINT ["/usr/bin/tini", "--"]
+USER app
+
 CMD ["node", "server.js"]
