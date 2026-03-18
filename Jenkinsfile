@@ -344,6 +344,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
                 sh '''
+                export KUBECONFIG="$KUBECONFIG_FILE"
                 echo "Using kubeconfig:"
                 kubectl config view
 
