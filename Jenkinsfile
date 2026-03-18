@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                sh 'kubectl cluster-info'
                 checkout scm
             }
         }
