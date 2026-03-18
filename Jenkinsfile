@@ -344,6 +344,14 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
                 sh '''
+                 echo "KUBECONFIG path:"
+                echo $KUBECONFIG
+
+                ls -l $KUBECONFIG
+
+                kubectl --kubeconfig=$KUBECONFIG config view
+                kubectl --kubeconfig=$KUBECONFIG get nodes
+
                 export KUBECONFIG="$KUBECONFIG_FILE"
                 echo "Using kubeconfig:"
                 kubectl config view
