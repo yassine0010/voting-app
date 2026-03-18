@@ -9,4 +9,4 @@ resources:
   # Pull in all shared app resources defined by k8s/base/kustomization.yaml.
   - ../../base
   # Add the Namespace object itself so the test namespace exists in the cluster.
-  - ../../base/namespaces/namespace-test.yaml
+  - namespace-test.yaml

@@ -186,6 +186,11 @@ pipeline {
                               yassine123432/vote:${BUILD_NUMBER}
                         '''
                     }
+                    post {
+                        always {
+                            archiveArtifacts artifacts: 'vote/reports/trivy-vote.json', allowEmptyArchive: true
+                        }
+                    }
                 }
 
                 stage('Scan result image (Trivy)') {
@@ -195,23 +200,28 @@ pipeline {
                             changeset pattern: 'Jenkinsfile', comparator: 'GLOB'
                         }
                     }
-                        steps {
-                            dir('result') {
-                                sh '''
-                                    mkdir -p reports
-                                    docker run --rm \
-                                      -v /var/run/docker.sock:/var/run/docker.sock \
-                                      -v "$WORKSPACE/.trivycache:/root/.cache/" \
-                                      -v "$PWD/reports:/output" \
-                                      aquasec/trivy:0.58.1 image \
-                                      --skip-db-update \
-                                      --severity HIGH,CRITICAL \
-                                      --format json \
-                                      --output /output/trivy-result.json \
-                                      --exit-code 0 \
-                                      yassine123432/result:${BUILD_NUMBER}
-                                '''
-                            }
+                    steps {
+                        dir('result') {
+                            sh '''
+                                mkdir -p reports
+                                docker run --rm \
+                                  -v /var/run/docker.sock:/var/run/docker.sock \
+                                  -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                                  -v "$PWD/reports:/output" \
+                                  aquasec/trivy:0.58.1 image \
+                                  --skip-db-update \
+                                  --severity HIGH,CRITICAL \
+                                  --format json \
+                                  --output /output/trivy-result.json \
+                                  --exit-code 0 \
+                                  yassine123432/result:${BUILD_NUMBER}
+                            '''
+                        }
+                    }
+                    post {
+                        always {
+                            archiveArtifacts artifacts: 'result/reports/trivy-result.json', allowEmptyArchive: true
+                        }
                     }
                 }
 
@@ -222,23 +232,28 @@ pipeline {
                             changeset pattern: 'Jenkinsfile', comparator: 'GLOB'
                         }
                     }
-                        steps {
-                            dir('worker') {
-                                sh '''
-                                    mkdir -p reports
-                                    docker run --rm \
-                                      -v /var/run/docker.sock:/var/run/docker.sock \
-                                      -v "$WORKSPACE/.trivycache:/root/.cache/" \
-                                      -v "$PWD/reports:/output" \
-                                      aquasec/trivy:0.58.1 image \
-                                      --skip-db-update \
-                                      --severity HIGH,CRITICAL \
-                                      --format json \
-                                      --output /output/trivy-worker.json \
-                                      --exit-code 0 \
-                                      yassine123432/worker:${BUILD_NUMBER}
-                                '''
-                            }
+                    steps {
+                        dir('worker') {
+                            sh '''
+                                mkdir -p reports
+                                docker run --rm \
+                                  -v /var/run/docker.sock:/var/run/docker.sock \
+                                  -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                                  -v "$PWD/reports:/output" \
+                                  aquasec/trivy:0.58.1 image \
+                                  --skip-db-update \
+                                  --severity HIGH,CRITICAL \
+                                  --format json \
+                                  --output /output/trivy-worker.json \
+                                  --exit-code 0 \
+                                  yassine123432/worker:${BUILD_NUMBER}
+                            '''
+                        }
+                    }
+                    post {
+                        always {
+                            archiveArtifacts artifacts: 'worker/reports/trivy-worker.json', allowEmptyArchive: true
+                        }
                     }
                 }
             }
