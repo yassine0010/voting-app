@@ -4,7 +4,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                sh 'kubectl config view'
                 checkout scm
             }
         }
