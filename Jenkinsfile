@@ -342,30 +342,18 @@ pipeline {
                 }
             }
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
-                sh '''
-                 echo "KUBECONFIG path:"
-                echo $KUBECONFIG
+                withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_TEXT')]) {
+                    sh '''
+                        printf "%s" "$KUBECONFIG_TEXT" > kubeconfig.yaml
 
-                ls -l $KUBECONFIG
+                        kubectl --kubeconfig=kubeconfig.yaml apply -k k8s/overlay/test
 
-                kubectl --kubeconfig=$KUBECONFIG config view
-                kubectl --kubeconfig=$KUBECONFIG get nodes
+                        kubectl --kubeconfig=kubeconfig.yaml set image -n test deployment/vote-deployment vote=yassine123432/vote:${BUILD_NUMBER}
+                        kubectl --kubeconfig=kubeconfig.yaml set image -n test deployment/result-deployment result=yassine123432/result:${BUILD_NUMBER}
+                        kubectl --kubeconfig=kubeconfig.yaml set image -n test deployment/worker-deployment worker=yassine123432/worker:${BUILD_NUMBER}
 
-                export KUBECONFIG="$KUBECONFIG_FILE"
-                echo "Using kubeconfig:"
-                kubectl config view
-
-                echo "Checking cluster connection..."
-                kubectl get nodes
-
-                echo "Deploying..."
-                kubectl apply -k k8s/overlay/test
-
-                kubectl set image -n test deployment/vote-deployment vote=yassine123432/vote:${BUILD_NUMBER}
-                kubectl set image -n test deployment/result-deployment result=yassine123432/result:${BUILD_NUMBER}
-                kubectl set image -n test deployment/worker-deployment worker=yassine123432/worker:${BUILD_NUMBER}
-            '''
+                        rm -f kubeconfig.yaml
+                    '''
                 }
             }
         }
