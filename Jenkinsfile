@@ -343,18 +343,20 @@ pipeline {
             }
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
-                    sh '''
-                        export KUBECONFIG=$KUBECONFIG_FILE
+                sh '''
+                echo "Using kubeconfig:"
+                kubectl config view
 
-                        kubectl cluster-info
-                        kubectl get nodes
+                echo "Checking cluster connection..."
+                kubectl get nodes
 
-                        kubectl apply -k k8s/overlay/test
+                echo "Deploying..."
+                kubectl apply -k k8s/overlay/test
 
-                        kubectl set image -n test deployment/vote-deployment vote=yassine123432/vote:${BUILD_NUMBER}
-                        kubectl set image -n test deployment/result-deployment result=yassine123432/result:${BUILD_NUMBER}
-                        kubectl set image -n test deployment/worker-deployment worker=yassine123432/worker:${BUILD_NUMBER}
-                    '''
+                kubectl set image -n test deployment/vote-deployment vote=yassine123432/vote:${BUILD_NUMBER}
+                kubectl set image -n test deployment/result-deployment result=yassine123432/result:${BUILD_NUMBER}
+                kubectl set image -n test deployment/worker-deployment worker=yassine123432/worker:${BUILD_NUMBER}
+            '''
                 }
             }
         }
