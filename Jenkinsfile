@@ -178,7 +178,6 @@ pipeline {
                               -v "$WORKSPACE/.trivycache:/root/.cache/" \
                               -v "$WORKSPACE/vote/reports:/output" \
                               aquasec/trivy:0.58.1 image \
-                              --skip-db-update \
                               --severity HIGH,CRITICAL \
                               --format json \
                               --output /output/trivy-vote.json \
@@ -209,7 +208,6 @@ pipeline {
                                   -v "$WORKSPACE/.trivycache:/root/.cache/" \
                                   -v "$PWD/reports:/output" \
                                   aquasec/trivy:0.58.1 image \
-                                  --skip-db-update \
                                   --severity HIGH,CRITICAL \
                                   --format json \
                                   --output /output/trivy-result.json \
@@ -241,7 +239,6 @@ pipeline {
                                   -v "$WORKSPACE/.trivycache:/root/.cache/" \
                                   -v "$PWD/reports:/output" \
                                   aquasec/trivy:0.58.1 image \
-                                  --skip-db-update \
                                   --severity HIGH,CRITICAL \
                                   --format json \
                                   --output /output/trivy-worker.json \
