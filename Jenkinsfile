@@ -149,17 +149,17 @@ pipeline {
             }
         }
 
-        stage('Trivy DB Update') {
-            steps {
-                sh '''
-                    mkdir -p "$WORKSPACE/.trivycache"
-                    docker run --rm \
-                      -v "$WORKSPACE/.trivycache:/root/.cache/" \
-                      aquasec/trivy:0.58.1 image \
-                      --download-db-only
-                '''
-            }
-        }
+        // stage('Trivy DB Update') {
+        //     steps {
+        //         sh '''
+        //             mkdir -p "$WORKSPACE/.trivycache"
+        //             docker run --rm \
+        //               -v "$WORKSPACE/.trivycache:/root/.cache/" \
+        //               aquasec/trivy:0.58.1 image \
+        //               --download-db-only
+        //         '''
+        //     }
+        // }
 
         stage('Security Check') {
             parallel {
@@ -259,7 +259,7 @@ pipeline {
             }
         }
 
-        stage('Push Images') {
+        stage('Push Imagess') {
             parallel {
                 stage('Push vote image') {
                     when {
