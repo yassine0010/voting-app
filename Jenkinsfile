@@ -307,7 +307,7 @@ pipeline {
                     }
                 }
 
-                stage('Push worker image') {
+                stage('Push worker imagfe') {
                     when {
                         anyOf {
                             changeset pattern: 'worker/**', comparator: 'GLOB'
