@@ -284,7 +284,7 @@ pipeline {
                     }
                 }
 
-                stage('Push result image') {
+                stage('Push result imaage') {
                     when {
                         anyOf {
                             changeset pattern: 'result/**', comparator: 'GLOB'
