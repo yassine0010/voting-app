@@ -357,7 +357,7 @@ withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
             }
         }
 
-        stage('Verify Test Rollout') {
+        stage('Verify Test Rolout') {
             when {
                 anyOf {
                     changeset pattern: 'vote/**', comparator: 'GLOB'
