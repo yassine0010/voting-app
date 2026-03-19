@@ -149,17 +149,17 @@ pipeline {
             }
         }
 
-        // stage('Trivy DB Update') {
-        //     steps {
-        //         sh '''
-        //             mkdir -p "$WORKSPACE/.trivycache"
-        //             docker run --rm \
-        //               -v "$WORKSPACE/.trivycache:/root/.cache/" \
-        //               aquasec/trivy:0.58.1 image \
-        //               --download-db-only
-        //         '''
-        //     }
-        // }
+        stage('Trivy DB Update') {
+            steps {
+                sh '''
+                    mkdir -p "$WORKSPACE/.trivycache"
+                    docker run --rm \
+                      -v "$WORKSPACE/.trivycache:/root/.cache/" \
+                      aquasec/trivy:0.58.1 image \
+                      --download-db-only
+                '''
+            }
+        }
 
         stage('Security Check') {
             parallel {
@@ -178,6 +178,7 @@ pipeline {
                               -v "$WORKSPACE/.trivycache:/root/.cache/" \
                               -v "$WORKSPACE/vote/reports:/output" \
                               aquasec/trivy:0.58.1 image \
+                              --skip-db-update \
                               --severity HIGH,CRITICAL \
                               --format json \
                               --output /output/trivy-vote.json \
@@ -208,6 +209,7 @@ pipeline {
                                   -v "$WORKSPACE/.trivycache:/root/.cache/" \
                                   -v "$PWD/reports:/output" \
                                   aquasec/trivy:0.58.1 image \
+                                  --skip-db-update \
                                   --severity HIGH,CRITICAL \
                                   --format json \
                                   --output /output/trivy-result.json \
@@ -239,6 +241,7 @@ pipeline {
                                   -v "$WORKSPACE/.trivycache:/root/.cache/" \
                                   -v "$PWD/reports:/output" \
                                   aquasec/trivy:0.58.1 image \
+                                  --skip-db-update \
                                   --severity HIGH,CRITICAL \
                                   --format json \
                                   --output /output/trivy-worker.json \
@@ -256,7 +259,7 @@ pipeline {
             }
         }
 
-        stage('Push Imagess') {
+        stage('Push Images') {
             parallel {
                 stage('Push vote image') {
                     when {
@@ -341,7 +344,7 @@ pipeline {
             steps {
 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
     sh '''
-        echo "Testing kbeconfig..."
+        echo "Testing kbeconfig."
         kubectl --kubeconfig=$KUBECONFIG get nodes
 
         kubectl --kubeconfig=$KUBECONFIG apply -k k8s/overlay/test
