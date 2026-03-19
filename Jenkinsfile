@@ -344,7 +344,7 @@ pipeline {
             steps {
 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
     sh '''
-        echo "Testing kbeconfig.."
+        echo "Testing kbeconfig."
         kubectl --kubeconfig=$KUBECONFIG get nodes
 
         kubectl --kubeconfig=$KUBECONFIG apply -k k8s/overlay/test
